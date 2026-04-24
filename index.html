@@ -9,95 +9,109 @@
     body {
       margin: 0;
       display: flex;
-      flex-direction: column; /* Changed to column to stack the arrow above the button */
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      background-color: #f0f0f0;
-      overflow: hidden; /* Prevents scrollbars when confetti flies off-screen */
+      background-color: #111; /* Darkened the background to make the lights pop */
+      overflow: hidden;
     }
 
-    /* Arrow Container and Animation */ 
     .arrow-container {
-      margin-bottom: 20px;
+      margin-bottom: 30px;
       animation: bounce 2s infinite ease-in-out;
     }
 
+    /* Increased the size of the arrow */
     .arrow {
-      width: 120px;
-      height: 150px;
+      width: 200px;
+      height: 290px;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5)); /* Universal glow for all colors */
     }
 
-    /* The dark background of the arrow */
     .arrow-bg {
-      fill: #333;
+      fill: #222;
+      stroke: #444;
+      stroke-width: 2;
     }
 
-    /* The animated glowing lights tracing the arrow */
+    /* Round, moving, multi-colored lights */
     .arrow-lights {
       fill: none;
-      stroke: #00ffcc;
-      stroke-width: 5;
-      stroke-dasharray: 15 15; /* Creates the dashed line effect */
-      animation: moveLights 1s linear infinite;
-      filter: drop-shadow(0 0 8px #00ffcc); /* Adds a neon glow */
+      stroke: url(#rainbowGradient); /* Uses the SVG gradient for different colors */
+      stroke-width: 14; /* Size of the light bulbs */
+      stroke-linecap: round; /* Makes the dashes perfectly round */
+      stroke-dasharray: 0 35; /* 0 length dash, 35px gap = evenly spaced dots */
+      animation: moveRoundLights 1s linear infinite;
     }
 
-    @keyframes moveLights {
-      from { stroke-dashoffset: 60; }
+    @keyframes moveRoundLights {
+      /* Offset needs to be a multiple of the dash gap (35) to loop smoothly */
+      from { stroke-dashoffset: 70; }
       to { stroke-dashoffset: 0; }
     }
 
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-15px); }
+      50% { transform: translateY(-20px); }
     }
 
-    /* Button Styling */
     button {
-      background-color: red;
+      background-color: #ff003c;
       color: white;
-      font-size: 2rem;
-      padding: 30px 60px;
+      font-size: 2.5rem;
+      font-weight: bold;
+      padding: 30px 80px;
       border: none;
-      border-radius: 10px;
+      border-radius: 15px;
       cursor: pointer;
       position: relative;
       z-index: 10;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      transition: background-color 0.3s, transform 0.1s;
+      box-shadow: 0 8px 25px rgba(255, 0, 60, 0.4);
+      transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
     }
 
     button:hover {
-      background-color: darkred;
+      background-color: #d90033;
+      box-shadow: 0 12px 35px rgba(255, 0, 60, 0.6);
     }
 
     button:active {
-      transform: scale(0.95); /* Adds a physical pressing effect */
+      transform: scale(0.92);
+      box-shadow: 0 4px 15px rgba(255, 0, 60, 0.4);
     }
   </style>
 </head>
 <body>
   
   <div class="arrow-container">
-    <svg class="arrow" viewBox="0 0 100 150">
-      <polygon class="arrow-bg" points="35,0 65,0 65,80 100,80 50,140 0,80 35,80" />
-      <polygon class="arrow-lights" points="35,0 65,0 65,80 100,80 50,140 0,80 35,80" />
+    <svg class="arrow" viewBox="0 0 200 290">
+      <defs>
+        <linearGradient id="rainbowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ff0000" />
+          <stop offset="20%" stop-color="#ffff00" />
+          <stop offset="40%" stop-color="#00ff00" />
+          <stop offset="60%" stop-color="#00ffff" />
+          <stop offset="80%" stop-color="#0000ff" />
+          <stop offset="100%" stop-color="#ff00ff" />
+        </linearGradient>
+      </defs>
+      
+      <polygon class="arrow-bg" points="70,10 130,10 130,160 190,160 100,270 10,160 70,160" />
+      <polygon class="arrow-lights" points="70,10 130,10 130,160 190,160 100,270 10,160 70,160" />
     </svg>
   </div>
 
-  <button id="push-btn">Graphnet Go Live Phase 1</button>
+  <button id="push-btn">Graphnet Go Live! Push me</button>
 
   <script>
     const button = document.getElementById('push-btn');
 
-    // Listen for the click event on the button
     button.addEventListener('click', () => {
-      // Fire the confetti explosion using the imported library
       confetti({
-        particleCount: 250,      // Number of confetti pieces
-        spread: 120,             // How wide the explosion is
-        origin: { y: 0.6 },      // Starts slightly lower than the very top of the screen
+        particleCount: 300,      
+        spread: 140,             
+        origin: { y: 0.6 },      
         colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff']
       });
     });
