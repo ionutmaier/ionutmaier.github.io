@@ -4,16 +4,56 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Push Me</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     body {
       margin: 0;
       display: flex;
+      flex-direction: column; /* Changed to column to stack the arrow above the button */
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       background-color: #f0f0f0;
+      overflow: hidden; /* Prevents scrollbars when confetti flies off-screen */
     }
 
+    /* Arrow Container and Animation */
+    .arrow-container {
+      margin-bottom: 20px;
+      animation: bounce 2s infinite ease-in-out;
+    }
+
+    .arrow {
+      width: 120px;
+      height: 150px;
+    }
+
+    /* The dark background of the arrow */
+    .arrow-bg {
+      fill: #333;
+    }
+
+    /* The animated glowing lights tracing the arrow */
+    .arrow-lights {
+      fill: none;
+      stroke: #00ffcc;
+      stroke-width: 5;
+      stroke-dasharray: 15 15; /* Creates the dashed line effect */
+      animation: moveLights 1s linear infinite;
+      filter: drop-shadow(0 0 8px #00ffcc); /* Adds a neon glow */
+    }
+
+    @keyframes moveLights {
+      from { stroke-dashoffset: 60; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    /* Button Styling */
     button {
       background-color: red;
       color: white;
@@ -22,14 +62,45 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: background-color 0.3s, transform 0.1s;
     }
 
     button:hover {
       background-color: darkred;
     }
+
+    button:active {
+      transform: scale(0.95); /* Adds a physical pressing effect */
+    }
   </style>
 </head>
 <body>
-  <button>Push me</button>
+  
+  <div class="arrow-container">
+    <svg class="arrow" viewBox="0 0 100 150">
+      <polygon class="arrow-bg" points="35,0 65,0 65,80 100,80 50,140 0,80 35,80" />
+      <polygon class="arrow-lights" points="35,0 65,0 65,80 100,80 50,140 0,80 35,80" />
+    </svg>
+  </div>
+
+  <button id="push-btn">Push me</button>
+
+  <script>
+    const button = document.getElementById('push-btn');
+
+    // Listen for the click event on the button
+    button.addEventListener('click', () => {
+      // Fire the confetti explosion using the imported library
+      confetti({
+        particleCount: 250,      // Number of confetti pieces
+        spread: 120,             // How wide the explosion is
+        origin: { y: 0.6 },      // Starts slightly lower than the very top of the screen
+        colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff']
+      });
+    });
+  </script>
 </body>
 </html>
